@@ -16,8 +16,8 @@ namespace MyBookStore.DB_Store
             : base("name=DB_MyStore")
         {
 
-            //Database.SetInitializer(new DropCreateDatabaseIfModelChanges<DB_MyStore>());
-            Database.SetInitializer(new DropCreateDatabaseAlways<DB_MyStore>());
+            Database.SetInitializer(new DropCreateDatabaseIfModelChanges<DB_MyStore>());
+            //Database.SetInitializer(new DropCreateDatabaseAlways<DB_MyStore>());
         }
 
         // Add a DbSet for each entity type that you want to include in your model. For more information 

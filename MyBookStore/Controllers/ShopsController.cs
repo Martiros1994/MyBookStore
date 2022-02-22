@@ -13,17 +13,47 @@ namespace MyBookStore.Controllers
     {
         private DB_MyStore db = new DB_MyStore();
 
-        [HttpGet]
-        public IQueryable<Book> BooksInAllStores(int? BookId)
+       
+        
+        public IQueryable<Store> BookSaleInStores(int? BookID ,DateTime dateTimeFrom, DateTime dateTimeTo)
         {
-            Book book = db.Books.FirstOrDefault(b => b.ID == BookId);
+
+            Book book = db.Books.FirstOrDefault(b => b.ID == BookID);
             if (book == null)
+            {
+                return Enumerable.Empty<Store>().AsQueryable();
+            }
+
+
+            IQueryable<Store> query = db.Shops
+                .Where(x => x.Book.ID == book.ID && x.DateSale >= dateTimeFrom && x.DateSale <= dateTimeTo)
+                .Select(x => x.Store);
+
+            return query;
+
+        }
+        
+        
+        
+        
+        
+        [HttpGet]
+        public IQueryable<Book> BooksSalesByDateAndStore(int? StoreID , DateTime dateTimeFrom , DateTime dateTimeTo)
+        {
+            Store store = db.Stores.FirstOrDefault(b => b.ID == StoreID);
+            if (store == null)
             {
                 return Enumerable.Empty<Book>().AsQueryable();
             }
 
-            IQueryable<Book> query = db.Shops.Include("Book").Where(x => x.Book.ID == book.ID).Select(y=>y.Book);
-       
+            IQueryable<Book> query = db.Shops
+                .Where(x => x.Store.ID == store.ID && x.DateSale >= dateTimeFrom && x.DateSale <= dateTimeTo)
+                .Select(x => x.Book);
+                //.GroupBy(x => x.)
+                
+
+             //IQueryable<Book> query = db.Shops.Include("Book").Where(x => x.Book.ID == book.ID).Select(y=>y.Book);
+
 
             return query;
         } 
@@ -48,8 +78,9 @@ namespace MyBookStore.Controllers
             {
                 Book = book,
                 Store = store,
-                Price = shopRequestModel.Price
-
+                Price = shopRequestModel.Price,
+                Quantity = shopRequestModel.Quantity,
+                DateSale = shopRequestModel.DateSale 
             };
 
 

@@ -19,5 +19,8 @@ namespace MyBookStore.Models
 
         [Required]
         public int Quantity { get; set; }
+        
+        [Required]
+        public DateTime DateSale { get; set; }
     }
 }

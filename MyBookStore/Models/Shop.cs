@@ -14,6 +14,6 @@ namespace MyBookStore.Models
         public Store Store { get; set; }     
         public int Price { get; set; }
         public int Quantity { get; set; }
-
+        public DateTime DateSale { get; set; }
     }
 }
